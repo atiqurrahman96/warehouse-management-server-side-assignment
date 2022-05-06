@@ -29,8 +29,13 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const product = await warehouseCollection.findOne(query);
             res.send(product);
+        });
+        // -----Post or Create data -----
+        app.post('/products', async (req, res) => {
+            const newProduct = req.body;
+            const result = await warehouseCollection.insertOne(newProduct)
+            res.send(result);
         })
-
 
     }
     finally {
