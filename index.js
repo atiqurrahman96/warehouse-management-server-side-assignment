@@ -36,6 +36,13 @@ async function run() {
             const result = await warehouseCollection.insertOne(newProduct)
             res.send(result);
         })
+        // ----Delete api----------
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await warehouseCollection.deleteOne(query);
+            res.send(result);
+        })
 
     }
     finally {
