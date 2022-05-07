@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config();
@@ -15,6 +16,7 @@ async function run() {
     try {
         await client.connect();
         const warehouseCollection = client.db('warehouse').collection('products');
+        const myItemsCollection = client.db('warehouse').collection('myItems');
 
         //--------data load or data read----
         app.get('/products', async (req, res) => {
@@ -22,6 +24,19 @@ async function run() {
             const cursor = warehouseCollection.find(query);
             const products = await cursor.toArray();
             res.send(products);
+        })
+        // --------my Items----
+        app.get('/myItems', async (req, res) => {
+            const query = {};
+            const cursor = myItemsCollection.find(query);
+            const items = await cursor.toArray();
+            res.send(items);
+        })
+        // ----userAuthentication by JWT token-------
+        app.post('/getToken', async (req, res) => {
+            const user = req.body;
+            const token = jwt.sign(user, process.env.SECRET_TOKEN, { expiresIn: '2d' })
+            res.send({ token })
         })
         // ----single data Load---------
         app.get('/products/:id', async (req, res) => {
