@@ -16,7 +16,7 @@ async function run() {
     try {
         await client.connect();
         const warehouseCollection = client.db('warehouse').collection('products');
-        const myItemsCollection = client.db('warehouse').collection('myItems');
+
 
         //--------data load or data read----
         app.get('/products', async (req, res) => {
@@ -25,13 +25,7 @@ async function run() {
             const products = await cursor.toArray();
             res.send(products);
         })
-        // --------my Items----
-        app.get('/myItems', async (req, res) => {
-            const query = {};
-            const cursor = myItemsCollection.find(query);
-            const items = await cursor.toArray();
-            res.send(items);
-        })
+
         // ----userAuthentication by JWT token-------
         app.post('/getToken', async (req, res) => {
             const user = req.body;
